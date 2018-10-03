@@ -1,8 +1,10 @@
 using kpi.core.Context;
+using kpi_learning.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +26,15 @@ namespace kpi_learning
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<KpiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.Configure<Controllers.SmtpConfig>(Configuration.GetSection("SmtpConfig"));
+            // services.AddTransient<IEmailSender, DevEmailSender>();
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                     // services.AddDefaultIdentity<IdentityUser>()
                     .AddEntityFrameworkStores<KpiContext>()
                     .AddDefaultTokenProviders();
+
+            services.AddSingleton<IEmailSender, DevEmailSender>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
