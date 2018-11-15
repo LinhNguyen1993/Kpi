@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-box">
+    <p class="login-box__title">Login here</p>
+    <form #loginForm="ngForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <input type="email" id="Email" name="Email" placeholder="Enter email" class="login-box__username" required
+          pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="email" #emailCtrl="ngModel">
+
+        <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)" class="validation-error-message alert alert-danger">
+          <div *ngIf="emailCtrl.errors.required">
+            Email is required.
+          </div>
+          <div *ngIf="emailCtrl.errors.pattern">
+            Email is not valid.
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="password" name="Password" placeholder="Enter password" required class="login-box__password"
+          [(ngModel)]="password" #passwordCtrl="ngModel" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$">
+
+        <div *ngIf="passwordCtrl.invalid && (passwordCtrl.dirty || passwordCtrl.touched)" class="validation-error-message alert alert-danger">
+          <div *ngIf="passwordCtrl.errors.required">
+            Password is required.
+          </div>
+          <div *ngIf="passwordCtrl.errors.pattern">
+            Password must contain one UpperCase, one LowerCase, one Number/SpecialChar and min 8 Chars.
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="error" style="margin-bottom: 15px; margin-top: -15px;" class="validation-error-message alert alert-danger">
+        {{error}}
+      </div>
+
+      <ul class="remember-me">
+        <li>
+          <input type="checkbox" name="Remember" value="" class="remember-me__checkbox" [(ngModel)]="remember">
+          <label class="remember-me__text"><span></span>Remember me</label>
+          <a href="#" class="remember-me__forgot-password">Forgot password?</a>
+        </li>
+      </ul>
+      <input type="submit" value="LOGIN" class="login-box__submit-button" [disabled]="loginForm.invalid">
+    </form>
+
+    <div class="register">
+      <p> To register new account <span>→</span> <a routerLink="/register" class="register__click-here-button" href="#small-dialog1">
+          Click Here</a></p>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>

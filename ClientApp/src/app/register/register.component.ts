@@ -1,47 +1,73 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent {
-  public model: RegisterModel = {
-    email: '',
-    password: '',
-    confirmPassword: ''
-  };
+export class RegisterComponent implements OnInit {
 
-  public email: string;
-  public password: string;
-  public confirmPassword: string;
-  public http: HttpClient;
-  public baseUrl: string;
-  headers = {
+  private registerForm: FormGroup;
+  emailCtrl: FormControl;
+  passwordCtrl: FormControl;
+  confirmPasswordCtrl: FormControl;
+  private email: string;
+  private password: string;
+  private confirmPassword: string;
+  private headers = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   };
 
+  ngOnInit(): void {
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.http = http;
-    this.baseUrl = baseUrl;
-  }
-  @Inject('BASE_URL')
-  register() {    
-    this.model.email = this.email;
-    this.model.password = this.password;
-    this.model.confirmPassword = this.confirmPassword;
-    var model = this.model
-    this.http.post<RegisterModel>(this.baseUrl + 'api/SampleData/register', JSON.stringify(model),this.headers).subscribe(result => {
+    this.emailCtrl = new FormControl('email', [
+      Validators.required,
+      Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+    ]);
+    this.passwordCtrl = new FormControl('', [
+      Validators.required,
+      Validators.pattern(/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)
+    ]);
+    this.confirmPasswordCtrl = new FormControl('', Validators.required);
+
+    this.registerForm = new FormGroup({
+      email: this.emailCtrl,
+      password: this.passwordCtrl,
+      confirmPassword: this.confirmPasswordCtrl
+    },{ validators: this.checkConfirmPassword });
+  }  
+
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+  
+  register() {
+    var data = new RegisterModel(this.password, this.email, this.confirmPassword);
+    this.http.post<RegisterModel>(this.baseUrl + 'Account/register', JSON.stringify(data), this.headers).subscribe(result => {
       console.log(result);
     }, error => console.error(error));
   }
+
+  checkConfirmPassword(group: FormGroup) {
+    let pass = group.controls.password.value;
+    let confirmPassword = group.controls.confirmPassword.value;
+
+    return pass === confirmPassword ? null : { notSame: true }
+  }
 }
 
-interface RegisterModel {
-  email: string;
-  password: string;
-  confirmPassword: string;
+export class RegisterModel {
+  constructor(password?: string, email?: string, confirmPassword?: string) {
+
+    this.email = email;
+    this.password = password;
+    this.confirmPassword = confirmPassword;
+  }
+
+  public email: string;
+  public password: string;
+  public confirmPassword: string;
+
 }

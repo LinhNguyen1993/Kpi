@@ -1,0 +1,122 @@
+@mixin input() {
+  width: 84%;
+  padding: 15px 10px 15px;
+  font-size: 14px;
+  background: transparent;
+  border: 2px solid #537b35;
+  outline: none;
+  margin-bottom: 26px;
+}
+
+@mixin button() {
+  font-size: 16px;
+  padding: 10px 45px;
+  background-color: #537b35;
+  color: #FFF;
+  border: none;
+  border-radius: 0px;
+  outline: none;
+  float: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fff;
+    color: #537b35;
+  }
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
+  background: url("../../assets/images/b2.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+
+}
+
+.register-box {
+  width: 30%;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  color: #fff;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+
+  &__username {
+    @include input();
+  }
+
+  &__password {
+    @include input();
+  }
+
+  &__confirm-password {
+    @include input();
+  }
+
+  &__title {
+    font-size: 25px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+}
+
+.register-buton-container {
+  padding: 5px 30px;
+  margin-bottom: 40px;
+
+  &__register-button {
+    @include button();
+    float: right;
+    padding: 10px 35px;
+
+    &:disabled {
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: .65;
+      color: #aaa;
+    }
+  }
+
+  &__back-button {
+    @include button();
+    float: left;
+  }
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #fff;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #fff;
+}
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #fff;
+}
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #fff;
+}
+
+.validation-error-message {
+  margin: 0px 30px;
+}
