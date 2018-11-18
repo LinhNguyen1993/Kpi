@@ -2,25 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using kpi.Entities;
-using kpi.core.BaseRepositories;
+using kpi_learning.Entities;
+using kpi_learning.core.BaseRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using kpi.core.Context;
+using kpi_learning.core.Context;
+using System.Linq;
+using kpi_learning.core.DbFactory;
 
-namespace kpi.core.BaseRepositories
+namespace kpi_learning.core.BaseRepositories
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityBase, new()
     {
-        private KpiContext _context;
+        private KpiContext _context;                     
         public EntityBaseRepository(KpiContext context)
         {
-            _context = context;
+            _context = context;            
         }
         public void Add(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);
-            _context.Set<T>().Add(entity);
+           _context.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
@@ -40,19 +42,19 @@ namespace kpi.core.BaseRepositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().AsEnumerable();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().ToListAsync();
         }
 
         public T GetSingle(int id)

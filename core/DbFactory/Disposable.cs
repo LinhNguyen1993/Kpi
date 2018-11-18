@@ -1,6 +1,6 @@
 using System;
 
-namespace kpi.core.DbFactory
+namespace kpi_learning.core.DbFactory
 {
     public class Disposable : IDisposable
     {

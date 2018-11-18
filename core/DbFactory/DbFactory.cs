@@ -1,15 +1,15 @@
-using kpi.core.Context;
+using kpi_learning.core.Context;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace kpi.core.DbFactory
+namespace kpi_learning.core.DbFactory
 {
     public class DbFactory : Disposable, IDbFactory
     {
         KpiContext dbContext;
         DbContextOptions<KpiContext> options;
         public KpiContext Init()
-        {
+        {            
             return dbContext ?? (dbContext = new KpiContext(options));
         }
  

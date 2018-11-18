@@ -15,10 +15,11 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SecureGuardService } from './core/services/secure-guard.service';
+import { CarComponent } from './car/car.component';
 
 export function tokenGetter() {
     return localStorage.getItem('access_token');
-  }
+}
 
 @NgModule({
     declarations: [
@@ -29,26 +30,21 @@ export function tokenGetter() {
         FetchDataComponent,
         RegisterComponent,
         LoginComponent,
+        CarComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', component: LoginComponent, pathMatch: 'full' , canActivate: [LoginComponentGuardService] },
+            { path: '', component: LoginComponent, pathMatch: 'full', canActivate: [LoginComponentGuardService] },
             { path: 'counter', component: CounterComponent },
-            { path: 'home', component: HomeComponent , canActivate: [SecureGuardService] },
+            { path: 'home', component: HomeComponent, canActivate: [SecureGuardService] },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'login', component: LoginComponent, canActivate: [LoginComponentGuardService] },
+            { path: 'car', component: CarComponent, canActivate: [SecureGuardService] },
         ]),
-        JwtModule.forRoot({
-            config: {
-              tokenGetter: tokenGetter,
-              whitelistedDomains: ['localhost:3001'],
-              blacklistedRoutes: ['localhost:3001/auth/']
-            }
-          }),
         ReactiveFormsModule,
     ],
     providers: [

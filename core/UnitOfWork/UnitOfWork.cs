@@ -1,11 +1,11 @@
-using kpi.core.Context;
-using kpi.core.DbFactory;
+using kpi_learning.core.Context;
+using kpi_learning.core.DbFactory;
 
-namespace kpi.core.UnitOfWork
+namespace kpi_learning.core.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbFactory dbFactory;
+       private readonly IDbFactory dbFactory;
         private KpiContext dbContext;
  
         public UnitOfWork(IDbFactory dbFactory)

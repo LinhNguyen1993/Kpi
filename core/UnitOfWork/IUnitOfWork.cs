@@ -1,4 +1,4 @@
-namespace kpi.core.UnitOfWork
+namespace kpi_learning.core.UnitOfWork
 {
     public interface IUnitOfWork
     {

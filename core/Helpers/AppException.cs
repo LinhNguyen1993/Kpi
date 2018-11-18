@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace kpi.Helpers
+namespace kpi_learning.Helpers
 {
     public class AppException : Exception
     {

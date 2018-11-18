@@ -1,0 +1,28 @@
+<h1> Add New Car </h1>
+
+<form #newCarForm="ngForm" (ngSubmit)="addNewCar()">
+  <div class="form-group">
+    <input type="text" id="Name" name="Name" placeholder="Enter Car Name" required [(ngModel)]="name" #nameCtrl="ngModel">
+
+    <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)" class="validation-error-message alert alert-danger">
+      <div *ngIf="nameCtrl.errors.required">
+        Car Name is required.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="Price" name="Price" placeholder="Enter Car Price" required [(ngModel)]="price" #priceCtrl="ngModel">
+
+    <div *ngIf="priceCtrl.invalid && (priceCtrl.dirty || priceCtrl.touched)" class="validation-error-message alert alert-danger">
+      <div *ngIf="priceCtrl.errors.required">
+        Car Price is required.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="Description" name="Description" placeholder="Enter Car Description" [(ngModel)]="description">
+  </div>  
+  <input type="submit" value="Add" class="login-box__submit-button" [disabled]="newCarForm.invalid">
+</form>

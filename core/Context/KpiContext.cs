@@ -1,8 +1,9 @@
-using kpi.Entities;
+using kpi_learning.Entities;
+using kpi_learning.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace kpi.core.Context
+namespace kpi_learning.core.Context
 {
     public class KpiContext :  IdentityDbContext
     {
@@ -10,5 +11,7 @@ namespace kpi.core.Context
         {
 
         }
+
+        public DbSet<CarModel> Cars { get; set; }
     }
 }

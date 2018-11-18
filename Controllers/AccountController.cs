@@ -96,7 +96,7 @@ namespace kpi_learning.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email,
-                    model.Password, model.Remember, lockoutOnFailure: true);
+                    model.Password, model.Remember, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     var tokenString = GenerateJSONWebToken(result);

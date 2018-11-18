@@ -1,10 +1,14 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text;
-using kpi.core.Context;
+using kpi_learning.core.BaseRepositories;
+using kpi_learning.core.Context;
+using kpi_learning.Models;
 using kpi_learning.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -32,6 +36,8 @@ namespace kpi_learning
             services.AddDbContext<KpiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.Configure<Models.SmtpConfigModel>(Configuration.GetSection("SmtpConfig"));
             services.Configure<Models.JwtConfigModel>(Configuration.GetSection("JwtIssuerOptions"));
+
+            services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
             // services.AddTransient<IEmailSender, DevEmailSender>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
@@ -39,7 +45,7 @@ namespace kpi_learning
                 config.SignIn.RequireConfirmedEmail = true;
             })
                     .AddEntityFrameworkStores<KpiContext>()
-                    .AddDefaultTokenProviders();            
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -51,7 +57,7 @@ namespace kpi_learning
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            services.AddSingleton<IEmailSender, EmailService>();            
+            services.AddSingleton<IEmailSender, EmailService>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services.AddAuthentication(options =>
@@ -77,6 +83,15 @@ namespace kpi_learning
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtIssuerOptions:Key"])),
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
+                });
+
+            services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsPolicy",
+                        builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
                 });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -105,6 +120,25 @@ namespace kpi_learning
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
+
+            app.UseCors("CorsPolicy");
+
+            // app.UseExceptionHandler(
+            //   builder =>
+            //   {
+            //       builder.Run(
+            //         async context =>
+            //         {
+            //             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            //             context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+            //             var error = context.Features.Get<IExceptionHandlerFeature>();
+            //             if (error != null)
+            //             {
+
+            //             }
+            //         });
+            //   });
 
             app.UseMvc(routes =>
             {

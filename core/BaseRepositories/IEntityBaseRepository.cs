@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using kpi.Entities;
+using kpi_learning.Entities;
 
-namespace kpi.core.BaseRepositories
+namespace kpi_learning.core.BaseRepositories
 {
     public interface IEntityBaseRepository<T> where T : class, IEntityBase, new()
     {        

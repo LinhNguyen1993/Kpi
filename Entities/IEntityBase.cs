@@ -1,6 +1,6 @@
 using System;
 
-namespace kpi.Entities
+namespace kpi_learning.Entities
 {
     public interface IEntityBase
     {
