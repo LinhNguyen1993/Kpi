@@ -10,8 +10,6 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SecureGuardService } from './core/services/secure-guard.service';
@@ -26,8 +24,6 @@ export function tokenGetter() {
         AppComponent,
         NavMenuComponent,
         HomeComponent,
-        CounterComponent,
-        FetchDataComponent,
         RegisterComponent,
         LoginComponent,
         CarComponent,
@@ -37,10 +33,8 @@ export function tokenGetter() {
         HttpClientModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', component: LoginComponent, pathMatch: 'full', canActivate: [LoginComponentGuardService] },
-            { path: 'counter', component: CounterComponent },
-            { path: 'home', component: HomeComponent, canActivate: [SecureGuardService] },
-            { path: 'fetch-data', component: FetchDataComponent },
+            { path: '', component: LoginComponent, pathMatch: 'full', canActivate: [LoginComponentGuardService] },            
+            { path: 'home', component: HomeComponent, canActivate: [SecureGuardService] },            
             { path: 'register', component: RegisterComponent },
             { path: 'login', component: LoginComponent, canActivate: [LoginComponentGuardService] },
             { path: 'car', component: CarComponent, canActivate: [SecureGuardService] },

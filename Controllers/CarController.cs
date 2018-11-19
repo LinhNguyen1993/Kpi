@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using kpi_learning.core.Context;
 using Microsoft.EntityFrameworkCore;
+using kpi_learning.core.UnitOfWork;
+using System.Linq;
 
 namespace kpi_learning.Controllers
 {
@@ -13,13 +15,13 @@ namespace kpi_learning.Controllers
     [Route("[controller]")]
     public class CarController : Controller
     {
-       private readonly IEntityBaseRepository<CarModel> _repository;
-       private readonly KpiContext _context;
+        private readonly IEntityBaseRepository<CarModel> _repository;        
+        private readonly IUnitOfWork _unitOfWork;
         public CarController(
-           IEntityBaseRepository<CarModel> repository, KpiContext context)
+           IEntityBaseRepository<CarModel> repository, IUnitOfWork unitOfWork)
         {
-           this._repository = repository;            
-           this._context = context;
+            this._repository = repository;            
+            this._unitOfWork = unitOfWork;
         }
 
         [HttpGet("[action]")]
@@ -27,10 +29,10 @@ namespace kpi_learning.Controllers
         public async Task<ActionResult<IEnumerable<CarModel>>> GetAllCars()
         {
             List<CarModel> cars = new List<CarModel>();
-            var qCars = await _repository.GetAllAsync();            
-            cars.AddRange(qCars);                        
+            var qCars = await _repository.GetAllAsync();
+            cars.AddRange(qCars);
             return cars;
-        }        
+        }
 
         [HttpPost("[action]")]
         [Authorize]
@@ -39,9 +41,10 @@ namespace kpi_learning.Controllers
             if (ModelState.IsValid)
             {
                 var cars = await _repository.FindByAsync(c => c.Name == model.Name);
-                if (cars == null)
+                if (!cars.Any())
                 {
                     _repository.Add(model);
+                    _unitOfWork.SaveChanges();
                     return Ok();
                 }
             }

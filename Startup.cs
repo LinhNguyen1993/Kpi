@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using kpi_learning.core.BaseRepositories;
 using kpi_learning.core.Context;
+using kpi_learning.core.UnitOfWork;
 using kpi_learning.Models;
 using kpi_learning.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,6 +39,7 @@ namespace kpi_learning
             services.Configure<Models.JwtConfigModel>(Configuration.GetSection("JwtIssuerOptions"));
 
             services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             // services.AddTransient<IEmailSender, DevEmailSender>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
@@ -121,24 +123,7 @@ namespace kpi_learning
             app.UseSpaStaticFiles();
             app.UseAuthentication();
 
-            app.UseCors("CorsPolicy");
-
-            // app.UseExceptionHandler(
-            //   builder =>
-            //   {
-            //       builder.Run(
-            //         async context =>
-            //         {
-            //             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            //             context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-            //             var error = context.Features.Get<IExceptionHandlerFeature>();
-            //             if (error != null)
-            //             {
-
-            //             }
-            //         });
-            //   });
+            app.UseCors("CorsPolicy");            
 
             app.UseMvc(routes =>
             {

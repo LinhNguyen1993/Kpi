@@ -9,6 +9,6 @@ namespace kpi_learning.Entities
 
     public class EntityBase : IEntityBase
     {
-        public Guid Id { get => Id; set => Id = new Guid(); }
+        public Guid Id { get; set; } = new Guid();
     }
 }

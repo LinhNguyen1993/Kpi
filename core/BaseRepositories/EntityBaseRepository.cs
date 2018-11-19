@@ -8,21 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using kpi_learning.core.Context;
 using System.Linq;
-using kpi_learning.core.DbFactory;
 
 namespace kpi_learning.core.BaseRepositories
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityBase, new()
     {
-        private KpiContext _context;                     
+        private KpiContext _context;
         public EntityBaseRepository(KpiContext context)
         {
-            _context = context;            
+            _context = context;
         }
         public void Add(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);
-           _context.Set<T>().Add(entity);
+            _context.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
@@ -39,7 +38,7 @@ namespace kpi_learning.core.BaseRepositories
 
         public IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().Where(predicate).ToList();
         }
 
         public async Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate)
@@ -57,19 +56,19 @@ namespace kpi_learning.core.BaseRepositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetSingle(int id)
+        public T GetSingle(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().SingleOrDefault(x => x.Id == id);
         }
 
         public T GetSingle(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().SingleOrDefault(predicate);
         }
 
-        public Task<T> GetSingleAsync(int id)
+        public async Task<T> GetSingleAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().SingleOrDefaultAsync(x => x.Id == id);
         }
     }
 }

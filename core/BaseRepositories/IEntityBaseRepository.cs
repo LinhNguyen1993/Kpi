@@ -10,9 +10,9 @@ namespace kpi_learning.core.BaseRepositories
     {        
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync();
-        T GetSingle(int id);
+        T GetSingle(Guid id);
         T GetSingle(Expression<Func<T, bool>> predicate);
-        Task<T> GetSingleAsync(int id);
+        Task<T> GetSingleAsync(Guid id);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
         Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate);
         void Add(T entity);

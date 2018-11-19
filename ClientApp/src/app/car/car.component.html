@@ -23,6 +23,25 @@
 
   <div class="form-group">
     <input type="text" id="Description" name="Description" placeholder="Enter Car Description" [(ngModel)]="description">
-  </div>  
+  </div>
   <input type="submit" value="Add" class="login-box__submit-button" [disabled]="newCarForm.invalid">
 </form>
+
+<div style="margin-top: 20px;">
+    <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Car Name</th>
+            <th>Car Price</th>
+            <th>Car Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let car of cars">
+            <td>{{car.name}}</td>
+            <td>{{car.price}}</td>
+            <td>{{car.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>

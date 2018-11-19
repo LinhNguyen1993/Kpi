@@ -1,26 +1,42 @@
+using System;
 using kpi_learning.core.Context;
-using kpi_learning.core.DbFactory;
 
 namespace kpi_learning.core.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
-    {
-       private readonly IDbFactory dbFactory;
-        private KpiContext dbContext;
+    public class UnitOfWork : IUnitOfWork, IDisposable
+    {       
+        private KpiContext _dbContext;
  
-        public UnitOfWork(IDbFactory dbFactory)
+        public UnitOfWork(KpiContext dbContext)
         {
-            this.dbFactory = dbFactory;
-        }
- 
-        public KpiContext DbContext
-        {
-            get { return dbContext ?? (dbContext = dbFactory.Init()); }
-        }
- 
+            this._dbContext = dbContext;
+        }        
+
         public void SaveChanges()
         {
-            DbContext.SaveChanges();
+            _dbContext.SaveChanges();
+        }
+
+        private bool isDisposed;        
+ 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private void Dispose(bool disposing)
+        {
+            if (!isDisposed && disposing)
+            {
+                DisposeCore();
+            }
+ 
+            isDisposed = true;
+        }
+ 
+        // Ovveride this to dispose custom objects
+        protected virtual void DisposeCore()
+        {
         }
     }
 }
