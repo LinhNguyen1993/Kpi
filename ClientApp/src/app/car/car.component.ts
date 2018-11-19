@@ -14,16 +14,6 @@ export class CarComponent implements OnInit {
   description: string;
   error: any = null;
   cars: any = [];
-  private token = localStorage.getItem(environment.tokenName);
-
-  private headers = {
-    headers: new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-      "Authorization": "Bearer " + this.token,
-      "Content-Type": "application/json"
-    })
-  };
 
   constructor(private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string, ) { }
@@ -32,16 +22,10 @@ export class CarComponent implements OnInit {
     this.getCars();
   }
 
-  addNewCar() {    
+  addNewCar() {
     let model: CarModel = new CarModel(this.name, this.price, this.description);
-    this.http.post<any>(this.baseUrl + 'Car/AddNewCar', JSON.stringify(model), {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer " + this.token,
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-      })
-    }).subscribe(result => {
+    this.http.post<any>(this.baseUrl + 'Car/AddNewCar', JSON.stringify(model)
+    ).subscribe(result => {
       this.getCars();
     }, error => {
       this.error = error.error;
@@ -49,16 +33,9 @@ export class CarComponent implements OnInit {
   }
 
   getCars() {
-    this.http.get<any>(this.baseUrl + 'Car/GetAllCars', {
-      headers: new HttpHeaders({
-        "Authorization": `Bearer ${this.token}`,
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-      })
-    }).subscribe(result => {
+    this.http.get<any>(this.baseUrl + 'Car/GetAllCars'
+    ).subscribe(result => {
       this.cars = result;
-      console.log(this.cars);
     }, error => {
       this.error = error.error;
     });
